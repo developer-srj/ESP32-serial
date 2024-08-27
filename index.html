@@ -155,17 +155,30 @@
         <div>
             <label for="port">Port:</label>
             <select id="port">
-                <option value="/dev/ttyUSB0">/dev/ttyUSB0</option>
-                <option value="/dev/ttyUSB1">/dev/ttyUSB1</option>
-                <!-- Add other options as needed -->
             </select>
 
             <label for="baudRate">Baud Rate:</label>
             <select id="baudRate">
+                <option value="300">300</option>
+                <option value="600">600</option>
+                <option value="1200">1200</option>
+                <option value="2400">2400</option>
+                <option value="4800">4800</option>
                 <option value="9600">9600</option>
+                <option value="14400">14400</option>
+                <option value="19200">19200</option>
+                <option value="38400">38400</option>
+                <option value="57600">57600</option>
                 <option value="115200">115200</option>
-                <!-- Add other options as needed -->
+                <option value="230400">230400</option>
+                <option value="250000">250000</option>
+                <option value="500000">500000</option>
+                <option value="1000000">1000000</option>
+                <option value="2000000">2000000</option>
+                <option value="3000000">3000000</option>
+                <option value="4000000">4000000</option>
             </select>
+
         </div>
 
 
@@ -215,43 +228,60 @@
             if (ansiCode.includes('[0;32mI')) return 'info';    // Info (Green)
             if (ansiCode.includes('[0;33mW')) return 'warning'; // Warning (Yellow)
             if (ansiCode.includes('[0;31mE')) return 'error';   // Error (Red)
-            if (ansiCode.includes('[0;33mD')) return 'debug'; // Debug (Cyan)
-            if (ansiCode.includes('[0;31mV')) return 'verbose';   // Verbose (Grey)
+            if (ansiCode.includes('[0;33mD')) return 'debug';   // Debug (Cyan)
+            if (ansiCode.includes('[0;31mV')) return 'verbose';  // Verbose (Grey)
             return '';  // Default, no special class
         }
 
-        ws.onmessage = function (event) {
-            const message = JSON.parse(event.data);
-            if (message.data) {
-                let line = message.data.trim();
+        // Open the WebSocket connection
+        ws.onopen = () => {
+            console.log('Connected to the WebSocket server');
 
-                // Determine if the line is log data or debug data
-                if (line.includes('[0;32mI') || line.includes('[0;33mW') || line.includes('[0;31mE') || line.includes('[0;31mD') || line.includes('[0;31mV')) {
-                    // This is log data
-                    const colorClass = getColorClass(line);
-                    var newline = ansiToAscii(line);
-                    const styledLine = `<div class="${colorClass}">${newline}</div>`;
-                    espTerminal.innerHTML += styledLine;
-
-                    // Auto-scroll the log terminal if enabled
-                    if (autoScrollCheckbox.checked) {
-                        espTerminal.scrollTop = espTerminal.scrollHeight;
-                    }
-                } else {
-                    // This is debug data
-                    const styledDebugLine = `<div class="debug-line">${line}</div>`;
-                    debugTerminal.innerHTML += styledDebugLine;
-
-                    // Auto-scroll the debug terminal if enabled
-                    if (autoScrollCheckbox.checked) {
-                        debugTerminal.scrollTop = debugTerminal.scrollHeight;
-                    }
-                }
-            }
+            // Send a request to get available ports
+            const request = JSON.stringify({ command: 'getAvlPort' });
+            ws.send(request);
         };
 
-        ws.onopen = function () {
-            console.log('WebSocket connection established');
+        ws.onmessage = function (event) {
+            try {
+                const message = JSON.parse(event.data);
+
+                if (message.type === 'available_ports') {
+                    if (message.type === 'available_ports') {
+                        const ports = message.data;
+                        console.log('Available ports:', ports);
+                        updatePortOptions(ports); // Update the select element with available ports
+                    }
+                } else if (message.data) {
+                    // Ensure the data is a string
+                    const line = typeof message.data === 'string' ? message.data : message.data.toString().trim();
+
+                    // Determine if the line is log data or debug data
+                    if (line.includes('[0;32mI') || line.includes('[0;33mW') || line.includes('[0;31mE') || line.includes('[0;33mD') || line.includes('[0;31mV')) {
+                        // This is log data
+                        const colorClass = getColorClass(line);
+                        const newline = ansiToAscii(line);
+                        const styledLine = `<div class="${colorClass}">${newline}</div>`;
+                        espTerminal.innerHTML += styledLine;
+
+                        // Auto-scroll the log terminal if enabled
+                        if (autoScrollCheckbox.checked) {
+                            espTerminal.scrollTop = espTerminal.scrollHeight;
+                        }
+                    } else {
+                        // This is debug data
+                        const styledDebugLine = `<div class="debug-line">${line}</div>`;
+                        debugTerminal.innerHTML += styledDebugLine;
+
+                        // Auto-scroll the debug terminal if enabled
+                        if (autoScrollCheckbox.checked) {
+                            debugTerminal.scrollTop = debugTerminal.scrollHeight;
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error parsing message:', error);
+            }
         };
 
         ws.onclose = function () {
@@ -283,6 +313,22 @@
         function ansiToAscii(str) {
             return str.replace(/\x1B\[[0-9;]*m/g, ''); // Removes ANSI escape sequences
         }
+
+
+
+
+        const portSelect = document.getElementById('port');
+        // Function to update port options
+        function updatePortOptions(ports) {
+            portSelect.innerHTML = ''; // Clear existing options
+            ports.forEach(port => {
+                const option = document.createElement('option');
+                option.value = port;
+                option.textContent = port;
+                portSelect.appendChild(option);
+            });
+        }
+
     </script>
 </body>
 
