@@ -221,7 +221,8 @@
                 if (line.includes('[0;32mI') || line.includes('[0;33mW') || line.includes('[0;31mE') || line.includes('[0;31mD') || line.includes('[0;31mV')) {
                     // This is log data
                     const colorClass = getColorClass(line);
-                    const styledLine = `<div class="${colorClass}">${line}</div>`;
+                    var newline = ansiToAscii(line);
+                    const styledLine = `<div class="${colorClass}">${newline}</div>`;
                     espTerminal.innerHTML += styledLine;
 
                     // Auto-scroll the log terminal if enabled
@@ -272,7 +273,7 @@
         }
 
         function ansiToAscii(str) {
-            return str.replace(/[^\x00-\x7F]/g, ''); // Removes non-ASCII characters
+            return str.replace(/\x1B\[[0-9;]*m/g, ''); // Removes ANSI escape sequences
         }
     </script>
 </body>
