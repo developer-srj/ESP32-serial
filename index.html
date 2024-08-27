@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Serial Monitor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        header {
+            background-color: #1e1e1e;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5em;
+            color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .controls {
+            background-color: #1e1e1e;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .controls label,
+        .controls select,
+        .controls input,
+        .controls button {
+            color: #e0e0e0;
+            background-color: #333;
+            border: none;
+            padding: 5px 10px;
+            margin-right: 10px;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .controls button {
+            cursor: pointer;
+        }
+
+        .controls input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .container0{
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        .terminal {
+            background-color: #1c1c1c;
+            border-radius: 10px;
+            padding: 10px 20px;
+            flex: 1;
+            overflow-y: auto;
+            max-height: calc(85vh - 150px);
+        }
+
+        .virTer{
+            background-color: #1c1c1c;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 10px 20px;
+            flex: 1;
+            /* overflow-y: auto; */
+        }
+
+        .container0 h2 {
+            color: #ffffff;
+            font-size: 1.2em;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info {
+            color: #00FF00;
+            /* Light green for Info */
+        }
+
+        .warning {
+            color: #FFFF00;
+            /* Amber for Warning */
+        }
+
+        .error {
+            color: #FF0000;
+            /* Light red for Error */
+        }
+
+        .debug {
+            color: #00FFFF;
+        }
+
+        .verbose {
+            color: #808080;
+        }
+
+        .debug-line {
+            color: #ffffff;
+            /* Light blue for Debug */
+        }
+
+        .terminal::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .terminal::-webkit-scrollbar-thumb {
+            background-color: #616161;
+            border-radius: 8px;
+        }
+
+        footer {
+            background-color: #1e1e1e;
+            padding: 10px;
+            text-align: center;
+            color: #9e9e9e;
+            font-size: 0.9em;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        ESP32 Debug & Logs Viewer
+    </header>
+    <div class="controls">
+        <div>
+            <label for="port">Port:</label>
+            <select id="port">
+                <option value="/dev/ttyUSB0">/dev/ttyUSB0</option>
+                <option value="/dev/ttyUSB1">/dev/ttyUSB1</option>
+                <!-- Add other options as needed -->
+            </select>
+
+            <label for="baudRate">Baud Rate:</label>
+            <select id="baudRate">
+                <option value="9600">9600</option>
+                <option value="115200">115200</option>
+                <!-- Add other options as needed -->
+            </select>
+        </div>
+
+
+
+        <!-- <div id="controls">
+        <label for="port">Port:</label>
+        <select id="port">
+            <option value="/dev/ttyUSB0">/dev/ttyUSB0</option>
+            <option value="/dev/ttyUSB1">/dev/ttyUSB1</option>
+        </select>
+
+        <label for="baudRate">Baud Rate:</label>
+        <select id="baudRate">
+            <option value="9600">9600</option>
+            <option value="115200">115200</option>
+        </select>
+
+        <button id="startStopButton" onclick="toggleMonitoring()">Start</button>
+
+        <label for="autoScrollCheckbox">Autoscroll:</label>
+        <input type="checkbox" id="autoScrollCheckbox" checked>
+    </div> -->
+
+
+
+
+        <div>
+            <button id="startStopButton" onclick="toggleMonitoring()">Start</button>
+
+            <label for="autoScrollCheckbox">Autoscroll:</label>
+            <input type="checkbox" id="autoScrollCheckbox" checked>
+        </div>
+
+    </div>
+
+
+    <div class="container0">
+        <div class="virTer">
+            <h2>Debug</h2>
+            <div id="debugTerminal" class="terminal debug">
+            </div>
+        </div>
+        <div class="virTer">
+            <h2>Logs</h2>
+            <div id="espTerminal" class="terminal esp">
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- 
+    <div class="terminal-container">
+        <div id="debugTerminal" class="terminal debug"></div>
+        <div id="espTerminal" class="terminal esp"></div>
+    </div> -->
+
+    <script>
+        const ws = new WebSocket('ws://localhost:8765');
+        const debugTerminal = document.getElementById('debugTerminal');
+        const espTerminal = document.getElementById('espTerminal');
+        const autoScrollCheckbox = document.getElementById('autoScrollCheckbox');
+        const startStopButton = document.getElementById('startStopButton');
+        let isMonitoring = false;
+
+        function getColorClass(ansiCode) {
+            if (ansiCode.includes('[0;32mI')) return 'info';    // Info (Green)
+            if (ansiCode.includes('[0;33mW')) return 'warning'; // Warning (Yellow)
+            if (ansiCode.includes('[0;31mE')) return 'error';   // Error (Red)
+            if (ansiCode.includes('[0;33mD')) return 'debug'; // Debug (Cyan)
+            if (ansiCode.includes('[0;31mV')) return 'verbose';   // Verbose (Grey)
+            return '';  // Default, no special class
+        }
+
+        ws.onmessage = function (event) {
+            const message = JSON.parse(event.data);
+            if (message.data) {
+                let line = message.data.trim();
+
+                // Determine if the line is log data or debug data
+                if (line.includes('[0;32mI') || line.includes('[0;33mW') || line.includes('[0;31mE') || line.includes('[0;31mD') || line.includes('[0;31mV')) {
+                    // This is log data
+                    const colorClass = getColorClass(line);
+                    const styledLine = `<div class="${colorClass}">${line}</div>`;
+                    espTerminal.innerHTML += styledLine;
+
+                    // Auto-scroll the log terminal if enabled
+                    if (autoScrollCheckbox.checked) {
+                        espTerminal.scrollTop = espTerminal.scrollHeight;
+                    }
+                } else {
+                    // This is debug data
+                    const styledDebugLine = `<div class="debug-line">${line}</div>`;
+                    debugTerminal.innerHTML += styledDebugLine;
+
+                    // Auto-scroll the debug terminal if enabled
+                    if (autoScrollCheckbox.checked) {
+                        debugTerminal.scrollTop = debugTerminal.scrollHeight;
+                    }
+                }
+            }
+        };
+
+        ws.onopen = function () {
+            console.log('WebSocket connection established');
+        };
+
+        ws.onclose = function () {
+            console.log('WebSocket connection closed');
+            if (isMonitoring) {
+                startStopButton.textContent = 'Start';
+                isMonitoring = false;
+            }
+        };
+
+        ws.onerror = function (error) {
+            console.error('WebSocket error:', error);
+        };
+
+        function toggleMonitoring() {
+            if (isMonitoring) {
+                ws.send(JSON.stringify({ command: 'stop' }));
+                startStopButton.textContent = 'Start';
+            } else {
+                const port = document.getElementById('port').value;
+                const baudRate = document.getElementById('baudRate').value;
+                ws.send(JSON.stringify({ command: 'configure', port, baud_rate: baudRate }));
+                ws.send(JSON.stringify({ command: 'start' }));
+                startStopButton.textContent = 'Stop';
+            }
+            isMonitoring = !isMonitoring;
+        }
+
+        function ansiToAscii(str) {
+            return str.replace(/[^\x00-\x7F]/g, ''); // Removes non-ASCII characters
+        }
+    </script>
+</body>
+
+</html>
