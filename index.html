@@ -149,8 +149,10 @@
 
 <body>
     <header>
+
         ESP32 Debug & Logs Viewer
     </header>
+
     <div class="controls">
         <div>
             <label for="port">Port:</label>
@@ -328,6 +330,11 @@
                 portSelect.appendChild(option);
             });
         }
+
+        // Notify the server when the page is closed
+        window.addEventListener("beforeunload", function (event) {
+            ws.send("page_closed");
+        });
 
     </script>
 </body>
