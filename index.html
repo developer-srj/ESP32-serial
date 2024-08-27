@@ -85,7 +85,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             padding: 10px 20px;
             flex: 1;
-            /* overflow-y: auto; */
         }
 
         .container0 h2 {
@@ -98,17 +97,14 @@
 
         .info {
             color: #00FF00;
-            /* Light green for Info */
         }
 
         .warning {
             color: #FFFF00;
-            /* Amber for Warning */
         }
 
         .error {
             color: #FF0000;
-            /* Light red for Error */
         }
 
         .debug {
@@ -121,7 +117,6 @@
 
         .debug-line {
             color: #ffffff;
-            /* Light blue for Debug */
         }
 
         .terminal::-webkit-scrollbar {
@@ -167,27 +162,6 @@
 
 
 
-        <!-- <div id="controls">
-        <label for="port">Port:</label>
-        <select id="port">
-            <option value="/dev/ttyUSB0">/dev/ttyUSB0</option>
-            <option value="/dev/ttyUSB1">/dev/ttyUSB1</option>
-        </select>
-
-        <label for="baudRate">Baud Rate:</label>
-        <select id="baudRate">
-            <option value="9600">9600</option>
-            <option value="115200">115200</option>
-        </select>
-
-        <button id="startStopButton" onclick="toggleMonitoring()">Start</button>
-
-        <label for="autoScrollCheckbox">Autoscroll:</label>
-        <input type="checkbox" id="autoScrollCheckbox" checked>
-    </div> -->
-
-
-
 
         <div>
             <button id="startStopButton" onclick="toggleMonitoring()">Start</button>
@@ -220,11 +194,6 @@
 
 
 
-    <!-- 
-    <div class="terminal-container">
-        <div id="debugTerminal" class="terminal debug"></div>
-        <div id="espTerminal" class="terminal esp"></div>
-    </div> -->
 
     <script>
         const ws = new WebSocket('ws://localhost:8765');
