@@ -7,6 +7,8 @@ import re
 
 serial_connection = None
 running = False  # Flag to control whether we are reading from the serial port
+clients = set()  # Track connected clients
+stop_event = asyncio.Event()  # Event to signal when to stop the server
 
 async def read_serial(websocket):
     global serial_connection, running
@@ -30,6 +32,9 @@ async def read_serial(websocket):
 
 async def handle_client(websocket, path):
     global serial_connection, running
+
+    # Add the new client to the set
+    clients.add(websocket)
 
     # Task to read serial data
     read_serial_task = None
@@ -68,22 +73,45 @@ async def handle_client(websocket, path):
                 ports = serial.tools.list_ports.comports()
                 available_ports = [port.device for port in ports]
                 await websocket.send(json.dumps({'type': 'available_ports', 'data': available_ports}))
+                
+            elif data.get('type') == 'page_closed':
+                print("Page closed signal received. Handling cleanup.")
+                # Remove the client and check if it's the last client
+                clients.remove(websocket)
+                if not clients:
+                    # Signal the main function to stop the server
+                    stop_event.set()
+                    return
     
     except websockets.ConnectionClosed:
         print("Connection closed")
+    finally:
+        if websocket in clients:
+            clients.remove(websocket)
 
 async def main():
+    global stop_event
     server = await websockets.serve(handle_client, "localhost", 8765)
+    print("WebSocket server started on ws://localhost:8765")
+
     try:
-        await asyncio.Future()  # Run forever
+        # Wait until the stop event is set
+        await stop_event.wait()
     finally:
+        print("Stopping server...")
         server.close()
         await server.wait_closed()
+        
+        # Ensure all remaining tasks are finished
+        await asyncio.sleep(0)  # Yield control to process pending tasks
+        if serial_connection:
+            serial_connection.close()
 
-try:
-    asyncio.run(main())
-except KeyboardInterrupt:
-    print("Server stopped")
-finally:
-    if serial_connection:
-        serial_connection.close()
+if __name__ == "__main__":
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Server interrupted and shutting down.")
+    finally:
+        if serial_connection:
+            serial_connection.close()
