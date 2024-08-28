@@ -49,11 +49,8 @@ chmod +x run.sh
 
 ### 5. Run the Script
 
-Execute the `run.sh` script to start the Serial Monitor in your Browser:
+Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial` directory to start the Serial Monitor in your Browser:
 
-```bash
-./run.sh
-```
 
 ## Requirements
 
@@ -71,14 +68,11 @@ These packages can be installed using `pip` and are required for the project to 
 
 Once you have completed the installation steps, you can run the project by executing the `run.sh` script. This script will run the `server.py` & open the `index.html` for your Browser.
 
-```bash
-./run.sh
-```
+Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial` directory to start the Serial Monitor in your Browser:
+
 ## Usage
 
-```
-./run.sh
-```
+Execute the `run.sh` script to start the Serial Monitor in your Browser:
 
 ## Contributing
 
