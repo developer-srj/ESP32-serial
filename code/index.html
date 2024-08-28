@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Serial Monitor</title>
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <header>
+
+        ESP32 Debug & Logs Viewer
+    </header>
+
+    <div class="controls">
+        <div>
+            <label for="port">Port:</label>
+            <select id="port">
+            </select>
+
+            <label for="baudRate">Baud Rate:</label>
+            <select id="baudRate">
+                <option value="300">300</option>
+                <option value="600">600</option>
+                <option value="1200">1200</option>
+                <option value="2400">2400</option>
+                <option value="4800">4800</option>
+                <option value="9600">9600</option>
+                <option value="14400">14400</option>
+                <option value="19200">19200</option>
+                <option value="38400">38400</option>
+                <option value="57600">57600</option>
+                <option value="115200">115200</option>
+                <option value="230400">230400</option>
+                <option value="250000">250000</option>
+                <option value="500000">500000</option>
+                <option value="1000000">1000000</option>
+                <option value="2000000">2000000</option>
+                <option value="3000000">3000000</option>
+                <option value="4000000">4000000</option>
+            </select>
+
+        </div>
+
+
+
+
+        <div>
+            <button id="startStopButton" onclick="toggleMonitoring()">Start</button>
+
+            <label for="autoScrollCheckbox">Autoscroll:</label>
+            <input type="checkbox" id="autoScrollCheckbox" checked>
+
+            <label for="autoScrollCheckbox">TimeStamp:</label>
+            <input type="checkbox" id="ShowTimeStaCheckbox"  checked>
+        </div>
+
+    </div>
+
+
+    <div class="container0">
+        <div class="virTer">
+            <h2>Debug</h2>
+            <div id="debugTerminal" class="terminal debug">
+            </div>
+        </div>
+        <div class="virTer">
+            <h2>Logs</h2>
+            <div id="espTerminal" class="terminal esp">
+            </div>
+        </div>
+    </div>
+
+
+    <footer>
+        Made with <span style="color: red;">🖤</span> by <a href="https://github.com/developer-srj/">SRJ</a>
+    </footer>
+
+
+
+    <script  src="scripts.js"></script>
+
+</body>
+
+</html>
