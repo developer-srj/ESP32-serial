@@ -21,4 +21,41 @@ First, clone the repository to your local machine using the following command:
 
 ```bash
 git clone https://github.com/developer-srj/ESP32-serial.git
-s
+```
+
+### 2. Navigate to the Project Directory
+
+Change to the project directory:
+
+```bash
+cd ESP32-serial
+```
+
+### 3. Install Dependencies
+
+Install the required Python packages listed in the `requirements.txt` file:
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Make the run.sh File Executable
+
+Before running the script, ensure that the `run.sh` file is executable:
+
+```bash
+chmod +x run.sh
+```
+
+### 5. Run the Script
+
+Execute the run.sh script to start the Serial Monitor:
+
+```bash
+./run.sh
+```
+
+
+
+
+
