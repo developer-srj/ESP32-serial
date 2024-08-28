@@ -1,4 +1,4 @@
-# Project Name
+# ESP32-Serial
 
 A brief description of your project. Explain what it does and its purpose.
 
