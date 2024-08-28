@@ -13,7 +13,7 @@ done
 
 
 FILE_PATH="code/index.html"
-SERVER_SCRIPT="code/server.py"
+SERVER_SCRIPT="code/Server.py"
 
 # Start the Python server in the background
 echo "Starting Python server..."
