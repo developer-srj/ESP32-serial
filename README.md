@@ -94,6 +94,9 @@ If you’d like to contribute to this project, please follow these steps:
 Please ensure that your code adheres to the project's coding standards and includes appropriate tests.
 
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 
 
