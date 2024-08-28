@@ -69,7 +69,7 @@ These packages can be installed using `pip` and are required for the project to 
 
 ## Running the Project
 
-Once you have completed the installation steps, you can run the project by executing the `run.sh` script. This script will run the `server.py` & open the `index.html` for your Serial monitor.
+Once you have completed the installation steps, you can run the project by executing the `run.sh` script. This script will run the `server.py` & open the `index.html` for your Browser.
 
 ```bash
 ./run.sh
