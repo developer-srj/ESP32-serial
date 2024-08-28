@@ -1,7 +1,4 @@
 #!/bin/bash
-
-sudo -i
-
 PORT=8765
 
 pids=$(sudo lsof -i :$PORT | awk '{print $2}' | grep -E '^[0-9]+$' | uniq)
