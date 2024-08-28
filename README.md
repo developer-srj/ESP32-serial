@@ -54,7 +54,7 @@ Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial
 Or use below bash command
 
 ```bash
-./run
+./run.sh
 ```
 
 
@@ -81,7 +81,7 @@ Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial
 use below shell command
 
 ```bash
-./run
+./run.sh
 ```
 
 ## Usage
@@ -91,7 +91,7 @@ Execute the `run.sh` script to start the Serial Monitor in your Browser:
 use below shell command
 
 ```bash
-./run
+./run.sh
 ```
 
 ## Contributing
