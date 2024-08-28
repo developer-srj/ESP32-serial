@@ -20,5 +20,5 @@ Follow these steps to set up and run the project on a Linux PC.
 First, clone the repository to your local machine using the following command:
 
 ```bash
-git clone https://github.com/your-username/your-repository-name.git
+git clone https://github.com/developer-srj/ESP32-serial.git
 s
