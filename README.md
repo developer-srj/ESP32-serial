@@ -1,6 +1,6 @@
 # ESP32-Serial
 
-A brief description of your project. Explain what it does and its purpose.
+Web-based Serial monitor for ESP32 for debugging & viewing the logs.
 
 ## Table of Contents
 
