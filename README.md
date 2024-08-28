@@ -49,7 +49,15 @@ chmod +x run.sh
 
 ### 5. Run the Script
 
-Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial` directory to start the Serial Monitor in your Browser:
+Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial` directory to start the Serial Monitor in your Browser
+
+Or use below bash command
+
+```bash
+./run
+```
+
+
 
 
 ## Requirements
@@ -70,9 +78,21 @@ Once you have completed the installation steps, you can run the project by execu
 
 Execute the `run.sh` script by running the `run.sh` located in the `ESP32-serial` directory to start the Serial Monitor in your Browser:
 
+use below shell command
+
+```bash
+./run
+```
+
 ## Usage
 
 Execute the `run.sh` script to start the Serial Monitor in your Browser:
+
+use below shell command
+
+```bash
+./run
+```
 
 ## Contributing
 
