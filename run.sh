@@ -9,8 +9,8 @@ for pid in $pids; do
 done
 
 
-FILE_PATH="code/index.html"
-SERVER_SCRIPT="code/Server.py"
+FILE_PATH="src/index.html"
+SERVER_SCRIPT="src/Server.py"
 
 # Start the Python server in the background
 echo "Starting Python server..."
