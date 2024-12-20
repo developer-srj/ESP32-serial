@@ -30,7 +30,7 @@ async def read_serial(websocket):
         # Handle the cancellation of the task
         pass
 
-async def handle_client(websocket, path):
+async def handle_client(websocket):
     global serial_connection, running
 
     # Add the new client to the set
