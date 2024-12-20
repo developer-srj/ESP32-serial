@@ -13,7 +13,7 @@ Web-based Serial monitor for ESP32 for debugging & viewing the logs.
 
 ## Installation Guide
 
-Follow these steps to set up and run the project on a Linux PC.
+Follow these steps to set up and run the project on a Linux PC (Not yet tested on Mac/ Windows)
 
 ### 1. Clone the Repository
 
