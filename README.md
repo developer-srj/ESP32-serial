@@ -2,6 +2,9 @@
 
 Web-based Serial monitor for ESP32 for debugging & viewing the logs.
 
+Shout out to [@parthbhat13](https://github.com/parthbhat13) for the idea & guidance!
+
+
 ## Table of Contents
 
 - [Installation Guide](#installation-guide)
